@@ -1,0 +1,22 @@
+server:
+  port: 4010
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        # Route for /api/patients/** to patient-service
+        - id: patient-service-route
+          uri: http://patient-service:4000
+          predicates:
+            - Path=/api/patients, /api/patients/**
+          filters:
+            - StripPrefix=1
+
+        # Route for API docs
+        - id: api-docs-patient-route
+          uri: http://patient-service:4000
+          predicates:
+            - Path=/api-docs/patients
+          filters:
+            - RewritePath=/api-docs/patients,/v3/api-docs
